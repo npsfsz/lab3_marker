@@ -1,0 +1,4 @@
+rm generateQRcode validateQRcode lib/*.o
+Makefile:43: recipe for target 'clean' failed
+finished copying required files...
+finished deleting testing files
