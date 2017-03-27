@@ -19,11 +19,11 @@ for x in os.walk(dir_path, topdown=True):
 
     if (dir_path + "/.git") in os.path.dirname(os.path.realpath(__file__)):
         print("git dir, skip ...")
-        time.sleep(1)
+#        time.sleep(1)
         continue
     if (dir_path + "/test") in os.path.dirname(os.path.realpath(__file__)):
         print("test dir, skip ...")
-        time.sleep(1)
+#        time.sleep(1)
         continue    
         
         
@@ -159,7 +159,7 @@ for x in os.walk(dir_path, topdown=True):
         
         for line in content:
             if len(line) > 5:
-                print(line)
+#                print(line)
                 if line.split()[0] == "HTOP":
                     hotp_valid = line.split()[3]
 
