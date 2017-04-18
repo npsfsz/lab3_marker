@@ -25,8 +25,12 @@ for x in os.walk(dir_path, topdown=True):
         print("test dir, skip ...")
 #        time.sleep(1)
         continue    
-        
-        
+    print(1)
+    subprocess.run(["make", "clean"])
+    subprocess.run(["rm", "-rf", "Makefile"])
+    subprocess.run(["rm", "-rf", "util"])
+    subprocess.run(["rm", "-rf", "lib"])
+    print(2)    
     logfile = open("logfile", "w")
     if os.path.isfile("README") == True and os.path.getsize("README") > 0:
         f = open("README")
@@ -70,6 +74,7 @@ for x in os.walk(dir_path, topdown=True):
   
         #base case: no spaces in issuer and account name, secret only number
         #generateQRcode uoft ece 12345678901234567890
+        #otpauth://hotp/ece?issuer=uoft&secret=CI2FM6EQCI2FM6EQ&counter=1
         temp = open("student_solution_1", "w")      
         try:
             subprocess.run(["./generateQRcode", "uoft", "ece", "12345678901234567890"], stdout = temp)
@@ -78,10 +83,26 @@ for x in os.walk(dir_path, topdown=True):
             time.sleep(3)
             pass
         temp.close()
-        if filecmp.cmp("../test/testcase/generateQRcode.basecase", "student_solution_1"):
+        
+        temp = open("student_solution_1", "r", encoding = "ISO-8859-1")
+        content = temp.readlines()
+        hotp_p1 = False
+        totp_p1 = False
+        for line in content:
+            print(line)
+            if "otpauth://hotp/ece?issuer=uoft&secret=CI2FM6EQCI2FM6EQ&counter=1" in line:
+                hotp_p1 = True
+                
+            if "otpauth://totp/ece?issuer=uoft&secret=CI2FM6EQCI2FM6EQ&period=30" in line:
+                totp_p1 = True
+        
+        if hotp_p1 == False:
+            logfile.write("generateQRcode test 1 HOTP failed...\n")
+        if totp_p1 == False:
+            logfile.write("generateQRcode test 1 TOTP failed...\n")
+        if hotp_p1 == True and totp_p1 == True:
             logfile.write("generateQRcode test 1 passed...\n")
-        else:
-            logfile.write("generateQRcode test 1 failed...\n")
+        temp.close()
 
 
 
@@ -94,11 +115,27 @@ for x in os.walk(dir_path, topdown=True):
             print("generateQRcode error...")
             time.sleep(3)
             pass
-        temp.close()        
-        if filecmp.cmp("../test/testcase/generateQRcode.space_in_name", "student_solution_2"):
+        temp.close()     
+        
+           
+        temp = open("student_solution_2", "r", encoding = "ISO-8859-1")
+        content = temp.readlines()
+        hotp_p2 = False
+        totp_p2 = False
+        for line in content:
+            if "otpauth://hotp/ece%20department?issuer=u%20of%20t&secret=CI2FM6EQCI2FM6EQ&counter=1" in line:
+                hotp_p2 = True
+                
+            if "otpauth://totp/ece%20department?issuer=u%20of%20t&secret=CI2FM6EQCI2FM6EQ&period=30" in line:
+                totp_p2 = True
+        
+        if hotp_p2 == False:
+            logfile.write("generateQRcode test 2 HOTP failed...\n")
+        if totp_p2 == False:
+            logfile.write("generateQRcode test 2 TOTP failed...\n")
+        if hotp_p2 == True and totp_p2 == True:
             logfile.write("generateQRcode test 2 passed...\n")
-        else:
-            logfile.write("generateQRcode test 2 failed...\n")
+        temp.close()
 
 
 
@@ -113,10 +150,25 @@ for x in os.walk(dir_path, topdown=True):
             pass
         temp.close()        
         
-        if filecmp.cmp("../test/testcase/generateQRcode.hex_secret", "student_solution_3"):
+        temp = open("student_solution_3", "r", encoding = "ISO-8859-1")
+        content = temp.readlines()
+        hotp_p3 = False
+        totp_p3 = False
+        for line in content:
+            if "otpauth://hotp/ece?issuer=uoft&secret=CI2FM6EQVPG66ERU&counter=1" in line:
+                hotp_p3 = True
+                
+            if "otpauth://totp/ece?issuer=uoft&secret=CI2FM6EQVPG66ERU&period=30" in line:
+                totp_p3 = True
+        
+        if hotp_p3 == False:
+            logfile.write("generateQRcode test 3 HOTP failed...\n")
+        if totp_p3 == False:
+            logfile.write("generateQRcode test 3 TOTP failed...\n")
+        if hotp_p3 == True and totp_p3 == True:
             logfile.write("generateQRcode test 3 passed...\n")
-        else:
-            logfile.write("generateQRcode test 3 failed...\n")
+        temp.close()
+
             
             
 
@@ -162,10 +214,10 @@ for x in os.walk(dir_path, topdown=True):
 #                print(line)
                 if line.split()[0] == "HTOP":
                     hotp_valid = line.split()[3]
-
+                    hotp_s = line.split()[2]
                 if line.split()[0] == "TOTP":
                     totp_valid = line.split()[3]
-  
+                    totp_s = line.split()[2]
         if hotp_valid == None or totp_valid == None:
             error = True
         """        
@@ -182,24 +234,25 @@ for x in os.walk(dir_path, topdown=True):
         """
         if error == True:
             print("I hit a error")
+            logfile.write("valide failed...")
             time.sleep(5)
         else:
-            if hotp_valid == "(invalid)":
-                logfile.write("HOTP validation failed...\n")
-            elif totp_valid == "(invalid)":
-                logfile.write("TOTP validation failed...\n")
+            if hotp_valid == "(valid)":
+                logfile.write("HOTP validation success...\n")
             else:
-                logfile.write("validateQRcode passed...\n")
+                logfile.write("HOTP failed..." + hotp + " " + hotp_s +"\n")
+                
+            if totp_valid == "(valid)":
+                logfile.write("TOTP validation success...\n")
+            else:
+                logfile.write("TOTP failed..." + totp + " " + totp_s +"\n")
 
         temp2.close()
         pass
     
     
-
-    subprocess.run(["make", "clean"], stdout = logfile)
-    subprocess.run(["rm", "-rf", "Makefile"], stdout = logfile)
-    subprocess.run(["rm", "-rf", "util"], stdout = logfile)
-    subprocess.run(["rm", "-rf", "lib"], stdout = logfile)
+    
+    
     """    
     os.system("make clean")
     os.system("rm -rf Makefile")
