@@ -1,0 +1,8 @@
+#Zhekang Peng, 998928068, zach.peng@mail.utoronto.ca
+#Jiayue Zhang, 1003555146, jiayue.zhang@mail.utoronto.ca
+
+Part1
+To generate the QR code, first we pad the input 'secret' with 0s if its length is less than 20. Then transfrom the 'secret' into byte form and combine higher byte and lower byte as base32_encode() function required input in this format. Then encode 'secret', 'accountname' and 'issuer'. Finally, use the given function to display QR code.
+
+Part2
+First we transform the secret_hex to a 10 byte array. Then use the HMAC = H[(K ⊕ opad) || H((K ⊕ ipad) || M)] formula, where ipad =0x363636...,opad=0x5c5c5c....Next,computer the inner digest and outer digest. For HOTP using counter and TOTP using timer, this step is diffierent. Finally, output the first 6 digits of the outer digest.

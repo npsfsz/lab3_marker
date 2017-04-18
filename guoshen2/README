@@ -1,0 +1,25 @@
+#Angus Liu, 1000065760, angus.liu@mail.utoronto.ca
+#Shengyuan Guo, 999867130, tony.guo@mail.utoronto.ca
+
+The generateQRcode implementation: 
+* takes in a 20 character string (hex representation) as a secret, as well as the issuer and the accountName.
+
+If the secret string is not long enough (less) than 20 characters it is padded with 0's until it is 20 characters.
+Then the secret string is converted to an array of bytes (every two characters in the string represent a hexidemical representation of a byte).
+Finally the array of bytes is base 32-encoded to create the secret value. The accountName and issuer are both encoded using the Url-encode function.
+
+To create the Hotp uri the secret value, encoded versions of the account Name and Issuer are used, as well as a counter of 1.
+
+To create the Totp uri the secret value , encoded version of the account Name and Issuer are used as well as a period of 30;
+
+
+
+ValidateQRcode:
+    1. Does a similar calculation as the generateQRcode to create a 20 character long key
+    2. Reverses key to the correct order for hashing
+    3. Hashes the key and "counter" using HMAC-SHA1
+        Counter is '1' for HOTP, time()/30 for TOTP
+    4. Runs DynamicTruncation function to reduce length of output
+    5. Truncates via modulo operation to 6 digits to get calculated password
+    6. Compares calculated password with given password to determine match
+

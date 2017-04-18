@@ -1,0 +1,21 @@
+#David Asbury, 1000393086, dave.asbury@mail.utoronto.ca
+
+Part 1
+-Encode the account name and issuer with urlEncode
+-pad the secret with 0's until its length is 20 bytes
+-convert the secret from a string to a byte array
+-encode the byte array to base32
+-use sprintf to generate the url strings, then generate the codes
+
+Part 2
+-Convert the secret to a byte array
+-setup i_key_pad and o_key_pad for HMAC
+-inner key pad is computed by padding the key to a size of 64 bytes, then xoring each byte with 0x36
+-outer key pad is computed in a similar way, except it is xored with 0x5c
+-inner hash is computed by concatenating the inner key pad with:
+ a) a counter set to 1 for HOTP
+ b)the current time step converted into an 8 byte array
+-outer hash is computed by concatenating the outer key pad with the inner hash
+-result is dynamically truncated and first 6 digits are taken by modding with 1000000
+-result is compared to the OTP string
+

@@ -1,0 +1,25 @@
+#Kevin Siu, 999636363, kcm.siu@mail.utoronto.ca
+
+generateQRcode.c
+================
+- To remove whitespaces/special characters from the AccountName and Issuer fields, I used the urlEncode() function inside 
+  encoding.h
+- To convert the secret from a hexadecimal string to a base32 string, I did the following steps:
+	1. Convert the hexadecimal string to binary representation using strtoul() (stored in variable 'hex_bits')
+	2. Pass hex_bits into the provided base32_encode() function to produce a base32 string representation
+- To produce the final URI, concatenate the above strings (with the other parts of the URI) and pass that into the displayQRcode()
+  function
+
+
+validateQRcode.c
+================
+- I performed the following steps to produce the 20 byte HMAC value:
+	1. Convert secret key from hexadecimal string to binary representation (same as in generateQRcode.c)
+	2. Pad the key (20 bytes) with 44 bytes of zeros because block size is 64 bytes
+	3a. In the HOTP calculation, write the counter value (1 for this lab) into the 8 bytes for the message.
+	3b. In the TOTP calculation, obtain the time (using time() function from C time library), subtract it from T0 (0 in this
+	    case) divide by the period (30 in this case), and store it in the 8 bytes for the message.
+	4. Pass the concatenation of the key ^ ipad and message into the SHA1 function to get the inner hash
+	5. Pass the concatenation of the key ^ opad and inner hash into the SHA1 function to get the outer hash (HMAC)
+- Next, I performed the truncation function (as described in RFC4226) to obtain the 6-digit code
+- Finally, I compared the calculated 6-digit code to the value provided by the user - returns 1 on match and 0 on no match

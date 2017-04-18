@@ -1,0 +1,14 @@
+#Radu Butoi, 1000645787, radu.butoi@mail.utoronto.ca
+
+generateQRcode.c
+----------------
+This program generates URIs and cooresponding QR codes for HOTP and TOTP keys
+given issuer, account name, and a hex secret. The secret is padded with zeroes
+as needed.
+
+validateQRcode.c
+----------------
+This program generates HOTP and TOTP keys from a secret, and verfies the
+user-provided values. It does this by computing the HMAC using either a counter
+value (starting with 1), for HOTP, or the unix-time-mod-30 (creating a password
+that expires every 30 seconds) for TOTP.

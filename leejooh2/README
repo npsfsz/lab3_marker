@@ -1,0 +1,10 @@
+Joohyun Lee, 1000134632, joohyun.lee@mail.utoronto.ca
+
+Part1:
+./generateQRcode <issuer> <account name> <20-character hex base-32 secret>
+User types in issuer, account name, and secret text upon calling GenerateQRcode, which creates QR code from the user input. The issuer and account name inputs are encoded using urlEncode, while the secret text is converted from hex to array of bytes, then encoded  using base32_encode. All three encoded values are then parsed into URI tobe used by displayQRcode to generate the QR code.
+
+
+Part2:
+./validateQRcode <20-character hex base-32 secret> <HTOP value> <TOTP value>
+User types in secret text, HTOP value, TOTP value generated from generateQRcode to validate the HTOP, TTOP values from corresponding secret, using HMAC-SHA1. To ensure HOTP validation is one-time ticket based, a counter is passed as a key into HMAC-SHA1. To ensure that TOTP validtion is 30-second timer based, time function is called to get a time stamp, which is divided by a period of 30 seconds, converted to an array of bytes, then passed as a key into HMAC-SHA1. The secret text is also converted to an array of bytes, and passed into HMAC-SHA1 as the data/M, in both HOTP and TOTP validation.

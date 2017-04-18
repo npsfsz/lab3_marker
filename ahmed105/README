@@ -1,0 +1,15 @@
+#Shariq Ahmed, 1000102621, sk.ahmed@mail.utoronto.ca
+#Vivek Mogalapalli, 999448209, vivek.mogalapalli@mail.utoronto.ca
+
+This submission contains two files: generateQRcode, validateQRcode. These files can be used to generate and validate codes for two factor authentication using Google's Auth API. 
+
+The generateQRcode application generates a QR code that contains the URI when given the Account name, Issuer, and a 80-bit secret key. It does this by converting the 80-bit secret key to a byte array which is then encoded in Base32. Any application supporting the Google Authentication API can be used to scan the QR code and a generate a Time based and Ticket based One Time Password (OTP) which is 6 digits long.
+
+The validateQRcode application can be used to validate the 6 digit OTP given the secret key. This is done by converting the secret key into a byte array. Then, then the HMAC is calculated using the following steps:
+1. The secret key is XORed with a large inner pad containing 0x36 as byte values.
+2. The result is concatenated with the message which may the system time (divided by 30) for TOTP or the counter for HOTP in a byte array format.
+3. This value is hashed using SHA1.
+4. The SHA1 output is concatenated with the secret key XORed with the outer pad containing 0x5c5c5.
+5. The concatenated output is hashed with SHA1 which gives 160-bit HMAC.
+
+The HMAC is truncated to a 6 digit counter using dynamic truncation and module. This value is compared with the input TOTP or HOTP code.

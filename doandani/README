@@ -1,0 +1,26 @@
+#Daniel Doan, 999528211, daniel.doan@mail.utoronto.ca
+
+Not sure if explanatios needed, but adding just in case
+
+generateQRCode
+1. urlEncode acocuntName and issuer
+2. 20 character input = 10 8 bit ints
+	- For each 8 bit int, get the two characters and parse them into their hex value
+		- Each character's value will occupy 4 bits inside each 8 bit int
+		[char[0] | char[1]]   [char[2] | char[3]]   ...
+3. Run base_32 encode to encode it into the secret of 16 base-32 values (80 bits / 5 bits)
+	- This forms the encoded secret
+4. concatenate all the encoded info into the TOTP and HOTP forms that were given
+
+validateQRCode
+Both HOTP and TOTP share the HOTP function with the exception that TOTP's counter is UNIX_TIME/30.
+The HOTP algorithm is done as so:
+1. The TOTP counter can be up to 8 bytes, so we fill it inside innerMsg (left pad with 0)
+2. We calculatae the secret in HEX, as it's given as a string array
+	- We need it to be 64*8 bytes to XOR
+	- We right pad the secret with 0 as specified in the documentation
+3. XOR the secret with 0x36 for the inner pad, 0x5c for the outer pad
+4. We calculate the SHA1 of the inner (iPAD + counterValue)
+5. We calculate the SHA1 of the outer (oPAD + SHA1(iPAD + countervalue))
+6. Use the truncate function found in the document to shrink it down to 6 bytes
+7. MOD the value with 1000000 - this produces the HOTP/TOTP value

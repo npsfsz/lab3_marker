@@ -1,0 +1,8 @@
+#Zhongyang Xiao, 999944173
+#Yang Chen, 999551783
+
+Part 1:
+To generate the QR code, we need the ACCOUNTNAME, ISSUER and SECRET. For ACCOUNTNAME and ISSUER we need to escape and special characters, which can be achieved by calling urlEncode(). For the SECRET value, we need to do some translation since the input is a string which takes 1 byte per character. We first need to tranlate each character from its ascii value to binary value. Since each character represents a hexadecimal number, which could be stored in 4 bits, we also need to concatenate every two number into 1 byte, so that the 20 byte number is represented in 10 bytes. Then the SECRET value can be obtained by calling base32_encode(). 
+
+Part 2:
+To validate the QR code, we need to be able to recompute the HOTP/TOTP value given the secret value and counter/time. To compute the HOTP/TOTP value, we use the HMAC-SHA1 function specified in RFC 2104: HS = H(K XOR opad, H(K XOR ipad, text)), with K being the padded secret value, ipad being 0x36 repeated 64 times and opad 0x5C repeated 64 times. The HS value is then dynamically truncated to produce a 31 bits value, the value is then modulo by 10^6 to get the HOTP/TOTP value. If the resulting HOTP/TOTP value is consistent with the values provided by user, the authentication is valid, otherwise invalid.

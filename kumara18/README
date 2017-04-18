@@ -1,0 +1,6 @@
+#Necat Kun, 999677014, n.kun@mail.utoronto.ca
+#Sivapiriyan Kumarasamy, 999865800, e-mail siva.kumarasamy@mail.utoronto.ca
+
+The generator uses the base32 encode function to translate an array of values with 2 hex values packed into each byte/element into a hashed secret password. This is then displayed as a QR code.
+
+The validator uses the HMAC and TOTP/HOTP specifications to translate the given secret key into a 6 digit TOTP/HOTP value. See code for comments.

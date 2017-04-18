@@ -1,0 +1,7 @@
+#Htut Aung, 999704814, htut.aung@mail.utoronto.ca
+#Zi Wei Wang, 999909504, waynezw.wang@mail.utoronto.ca
+
+Part 1:
+Generating QR code involves encoding the account name, the issuer. Then the secret hex is first converted into a byte array, which is then encoded to base 32. These values are then inserted into URI to generate the right QR code.
+Part 2:
+Validating QR code involves generating an 8 byte message m, which is 1 for HOTP since counter=1 and a current time value with a period 30 for TOTP. Then we use the same implementation for computing the hash, including storing the secret hex to bytes. This generates inner and outer padding by XOR with 0^36 and 0^5c respectively, then we compute the first step hash with inner padding and m. Finally we compute the hash using outer padding and first step hash. Then the algorithm in rfc4226 is applied to generate a 6 digit value, with 0s in front if the value has less than 6 digits.

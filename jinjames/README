@@ -1,0 +1,15 @@
+#James Jin, 1001260949, jamesj.jin@mail.utoronto.ca 
+#Zaid Kassar, 1001387821, zaid.kassar@mail.utoronto.ca
+
+Part 1: generateQRcode.c
+
+First, we converted the input secret into hex values and used the base32_encode function to generate an encoded result. We then concatenated a string which include the account name, issuer and encoded secret and used it to display the QR code (using the given displayQRcode function).
+
+
+Part 2: validateQRcode.c
+
+HOTP:
+First, we converted the secret to hex values (like in part 1). We padded the secret with 0's and XORed it with the ipad (e.g. 64 bytes of 0x36). We then created an 8-byte counter (1 padded with 0's). These values were hashed using the given SHA-1 function. Next, we created an outer key by XORing the padded secret with the opad (e.g. 64 bytes of 0x5C). Then, we hashed the outer key with the previously hashed result to get the final HMAC value. This was truncated by taking the last four bits as an offset value and taking four bytes of the HMAC starting at this offset. This produced a 32-bit result, from which we took the lower 31 bits. Finally, we modded this value with 1,000,000 to produce the final 6-digit HOTP value. We then converted the given HOTP string to an integer and compared our result with the given one. 
+
+TOTP:
+Similarly to the above description for the validation of the HOTP values, the TOTP part followed the same steps with the only difference being the 8-byte counter. Instead of this 8-byte counter, we used an 8-byte timer. This was the time in seconds passed since the default Epoch divided by 30 seconds. This yields the number of time steps that have occured. We then stored this value in the 8-bytes of the timer, which was split into 1-byte increments. Finally, this timer was used in the initial SHA-1 hash where the counter was used previously (in the HOTP validation function). After this step, all the steps involved were the same as described in the HOTP validation function and the final 6-digit TOTP value was compared to the integer representation of the given TOTP string. 

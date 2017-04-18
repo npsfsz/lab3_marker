@@ -1,0 +1,14 @@
+#Syeda Raza, syedaseemal.raza@mail.utoronto.ca, 999826363
+#Pushkar Bettadpur, pushkar.bettadpur@mail.utoronto.ca, 999774971
+
+GenerateQRCode.c:
+
+In this file, we attempt to generate a secret key based on a secret key provided to us. We are also provided with an Issuer and an Account Name, using which we compute a url and subsequently, generate a QR Code for both HOTP and TOTP which is displayed to terminal. Key steps here are to convert the secret key into a uint8_t array, converted to its binary form. Additionally, the issuer and the Account Name have to be specially encoded for the url in order to convert certain special characters to an appropriate url form.
+For the HOTP QR Code: A counter of 1 was chosen
+For the TOTP QR Code: A period of 30 was chosen
+
+ValidateQRCode.c:
+
+We are required to first generate the HOTP and TOTP values and compare them against the values provided by the user. HMAC-SHA1 requires two hashes. HMAC-SHA = H((K ⊕ opad) || H(K ⊕ ipad || M)). The first step would be to convert the secret key from hex to binary. To generate the SHA1 hash of the function we used the functions sha1_init(), sha1_update() and sha1() final. The same procedure is followed for both HOTP and TOTP. The only difference is that the message for HOTP validation is the counter, which we selected as 1 and appropriately converted to binary form but in Big Endian format. This is sent to sha1update() as an argument and in TOTP, the current time divided by 30, converted to binary in big endian and is sent as an argument. Once the HMAC is computed, it needs to be truncated to a 6 Byte output so we call our truncate function. Once the appropriate OTP is computed, it is computed against what is provided by the user and successful if the values are the same.
+
+NOTE: IF the TOTP validation fails, it is likely that the 30 second period has expired and you may need to run generate and validate again.

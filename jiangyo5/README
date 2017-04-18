@@ -1,0 +1,5 @@
+#Yong Jiang, 1003581402, yong.jiang@mail.utoronto.ca
+#Zehua Lu, 1003595086, zehua.lu@mail.utoronto.ca 
+
+The hash function is built following the instruction and example in the docs. The time counter is set to be exactly in the same period, without checking the previous and post periold. 
+String arguments are supposed to be quoted with "" as one complete argument. For example, "U of T" will be treated as a whole.

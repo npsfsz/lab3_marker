@@ -1,0 +1,17 @@
+#Jacob Ritchie, 999771983, jacob.ritchie@mail.utoronto.ca
+#Bill Zhao, 999721127, bill.zhao@mail.utoronto.ca
+
+The first file simply converts the string representation of secret hex
+to an array of bytes, then calls the provided base32_encode function
+on that byte array. The two other user provided strings are passed to the
+provided urlEncode function, and then all three quantities are printed to 
+two strings representing the HOTP and TOTP URIs. Then the displayQRcode
+function is called for each URI.
+
+To validate the OTP codes taken from the QR codes, the string representation of secret hex
+is again converted to an array of bytes, The counter or time value is generated
+as a 64 bit number. The counter value is assumed to always be 1 and the period
+for the TOTP is assumed to always be 30. An HMAC is generated using the 
+secret hex number as a key and the message set to be the time for TOTP or the counter for HOTP,
+using the HMAC method described in RFC 2104. The HMAC is then truncated to 6 digits as 
+described in RFC 4226, and compared with the provided OTP input string.

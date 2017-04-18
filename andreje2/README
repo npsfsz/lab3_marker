@@ -1,0 +1,12 @@
+# Brandon Norberto, 0999727835, brandon.norberto@mail.utoronto.ca
+# Nikola Andrejevic, 1001517753, nikola.andrejevic@mail.utoronto.ca
+
+
+Generate QR Code Quick explanation:
+
+The code takes the secret string of hex characters and converts the ascii values to the appropriate bits and encodes the account name and the issuer. After this, it stores the appropriate strings using these three values and then uses the displayQRcode function with the two strings to display the hotp and totp QR code.
+
+
+Validate QR Code Quick explanation:
+
+Given the secret key and the HOTP and TOTP values, the code makes the key out of the given hex string by turning it into an actual binary value. given this value, it makes 2 keys to be used by the inner and outer hashes and creates the HMAC with the keys and the value, be it a hashed counter or timer. The HMAC is truncated as defined by the RFC specifications and then converted to a string to compare to the given TOTP or HOTP values.

@@ -1,0 +1,4 @@
+The generate function was done simply by converting the input "hex" string into
+numeric representation in the required "big-endian" format.
+
+The validate function generates the six-byte and then compares the string.

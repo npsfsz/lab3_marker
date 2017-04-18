@@ -1,0 +1,44 @@
+#Nikita Tsytsarkin, 1000948255, nik.tsytsarkin@mail.utoronto.ca
+#Paul Robichaud, 1000457436, josh.robichaud@mail.utoronto.ca
+
+Usage:
+./generateQRcode <ISSUER> <USERNAME> <HEX_SECRET>
+
+./validateQRcode <HEX_SECRET> <HOTP> <TOTP>
+
+Explanations:
+This lab implements a part of a 2 factor authentication system based on HOTP
+and TOTP tokens
+
+generateQRcode:
+generateQRcode simply parses input parameters and generates URLs in specified
+format. Provided QR code library is called to generate desired QR code.
+
+The only challenge with this part was converting hex input provided as
+a char array into it's binary representation.
+
+validateQRcode:
+this part needs to generate HOTP and TOTP codes and check if the generated code
+matches provided input.
+SHA1 hash function was used to generate HOTP tokens. HOTP algorithm was
+implemented according to documentation provided in rfc4226.
+HOTP takes a counter value as input, to generate a token. Since we are not
+provided with the counter value within input, value of 1 was hardcoded.
+This is the value used to generate QR code.
+
+TOTP is identical to HOTP algorithm, except instead of a counter value, a timer
+value is used. To acquire timer value we need to take current UNIX time in
+seconds and divide it by period (30 sec by default). This value is being fed
+into HOTP algorithm (instead of the counter value) to generate a TOTP code.
+
+TOTP requires client's and server's clocks to be synchronized to within <30 sec
+range in order to work. rfc6238 describes a mechanism that allows to account
+for greater clock skew by calculating nearby values (simply by generating
+codes with nearby timestamps), but it was not implemented in this lab,
+because it was not a part of the lab specifications and the error tolerance
+value was not provided.
+
+Some challenges we faced with generating tokens were converting integers and
+other numerical types into byte strings, because x86-64 is a little-endian
+architecture and algorithms described in the documents were expecting
+big-endian representation of numerical values as a byte string.

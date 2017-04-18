@@ -1,0 +1,8 @@
+#Ambarish Gugilla, 1001344609, a.gugilla@mail.utoronto.ca
+
+Part 1:
+Generates a QR code by encoding the accountname, issuer, and secret key provided by user. It converts the secret key to a byte array and is encoded using base32_encode function. A URI string is created
+by simply concatenating the given inputs into the specified format. Then displayQRcode generates a visual QR code on the screen using the URI string. 
+
+Part 2:
+Validate a HOTP and TOTP value for a given secret key. Uses the SHA1 algorithm from the RFC doc after creating the IPAD and OPAD. For HOTP, it creates a counter array with value of 1 and sends it to the checkHMAC function. For TOTP the time(NULL) function is used to get the current system time, and converted to a binary array, and sends it to the checkHMAC function. The checkHMAC function then tries to generate the HOTP and TOTP values to confirm the correctness of the input. 

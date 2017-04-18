@@ -1,0 +1,20 @@
+#Da Hoon Pyun, 999610979, dahoon.pyun@mail.utoronto.ca
+#Avishek Bose, 999738440, joey.bose@mail.utoronto.ca
+
+To complete the lab, the following steps were followed
+
+Part 1: Generating an otpauth:// URI
+1. First, we check the length of the secret hex. If it is less than 20, we pad it with 0's.
+2. The Issuer and Account Name Fields are encoded using the provided url encode function
+3. The secret is converted from char to uint_8 as the base32_encode function expects uint8_t. This is done by converting chars to hex by calling sscanf 2 bytes at a time.
+4. The HOTP and TOTP uri are created by replacing the appropriate fields in the provided string using snprintf. After which the displayQRcode function is called.
+
+Part 2: Validating the Codes
+1. First, we check the length of the secret hex. If it is less than 20, we pad it with 0's.
+2. The secret is then converted from char to uint8_t in the same way as part 1.
+3. The HMAC is calculated by first creating buffers for the inner and outer pads using 0x36 and 0x5c which are XOR'ed with the secret key.
+4. For the inner pad in HOTP, a counter value of 1 is encoded into an unint8_t array of size 8 and is then hashed with the inner pad.
+5. The result of the previous step is then hashed together with the outer pad array that was XOR'ed with the secret key.
+6. Dynamic Truncating is used in the same manner as outlined in the paper and its result is compared with the input value.
+7. A matching value indicates a correct code and validates the key.
+8. For TOTP values, the exact same steps are followed except that instead of using a counter of 1, we take the UNIX time for a 30 second period and write that into a uint8_t array of size 8 using a combination of byte masking and byte shift right.

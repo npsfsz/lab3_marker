@@ -1,0 +1,12 @@
+#Hsin-Yo Chen, 998891864, leola.chen@mail.utoronto.ca
+
+Part 1:
+1) parse the input secret to the correct format(2 chars in one byte. Value 0-9 is number 0-9, value 10 - 33 is 'a' to 'z'.
+2) urlEncode account name and issuer.
+3) create otpauth line.
+4) generate HOTP and TOTP
+
+Part 2:
+1) parse the input secret to the correct format just like part 1.
+2) creating 2 padding with the parsed secret copied into them. And then one or with 0x36, the other with 0x5c for HOTP security reason.
+3) Use the values to get the verification values for HOTP and TOTP respectively, and verify if the verification value is valid.

@@ -1,0 +1,16 @@
+#Wei Chung Yang, 999247364, willy.yang@mail.utoronto.ca
+#Chris Wong, 999578844, chrisw.wong@mail.utoronto.ca
+
+Part 1
+make
+./generateQRcode ISSUER ACCOUNTNAME SECRET
+./generateQRcode ECE568 "U of T" 12345678901234567890
+
+Format the otpauth by encoding the accountname and issuer and base32 encoding a secret. To convert the secret string to byte array, copy every two string characters to one hex. Use these values to create the URI.
+
+Part 2
+make
+./util/generateValues 12345678901234567890
+./validateQRcode 12345678901234567890 803282 <TOTP VALUE FROM PREVIOUS CALL TO GENERATE VALUES>
+
+This part validates a QR code by generating the HOTP and TOTP values from the secret and verifying them to the expected result. Generating the HOTP values requires converting the secret to a byte array, caculating a HMAC-SHA-1 value using the byte array hex and a counter, dynamically truncating the HMAC-SHA-1 value, and outputting the HOTP value by applying a mod to the final result. Finally, to validate a TOTP value, we apply the same algorithm except this time we are using a time based value instead a fixed counter value.

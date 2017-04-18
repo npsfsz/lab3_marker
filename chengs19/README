@@ -1,0 +1,15 @@
+#Shaocong Cheng, 999197907, sean.cheng@mail.utoronto.ca
+#Erhao Chen, 999673759, benjaminz.chen@mail.utoronto.ca
+
+QR Code Generator Implementation:
+
+Converts hexidecimal secret into uint8 array, then encods with base32_encode().
+issuer and account name encoded with urlEncode().
+
+Code Validator Implementation:
+
+Converts hexidecimal secret into uint array, then hashs it in HMAC with:
+HOTP: counter value
+TOTP: Time (under period 30)
+
+Then the hashed value is truncated and mod 1,000,000 to generate 6 digit hotp/totp value.

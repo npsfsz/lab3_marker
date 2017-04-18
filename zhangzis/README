@@ -1,0 +1,5 @@
+#Zisheng Zhang, 1000181821, carlos.zhang@mail.utoronto.ca
+
+generateQRcode: simply call the functions procided with user input as credentials to generate the link/QR code.
+
+validateQRcode: convert the "secret_hex" input to uint8_t. For "validateHOTP()", counter is set to 00000001. For validateTOTP(), the time differnce between the current time and default UTC time is used to set the counter with uint8_t type. Then "hmac_sha1()" is called to generate the HMAC result. "sha[20-1]&0xf" then gives an offset used for extracting from the string. The DT string is obtained as %10^6 (to match assert statement of 6 characters). Finally the provided code checks the reslt with expected result.

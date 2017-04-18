@@ -1,0 +1,22 @@
+#Jaime Iturriaga, 1000494510, jaime.iturriaga@mail.utoronto.ca
+Part 1: Generating an otpauth://URI
+
+	Using a series of strcats I form together the basic portion of the URI. The difficult part was using the 
+	32 base secret, which required converting the hexstring that we have, into the proper hex in memory, 
+	and then using the base32 encode function. To convert the string, I read the string at 2 characters at a time,
+	converted both characters into their respective hex number (i.e. '1' became 0x01, 'A' became 0x0A). I multiplied
+	the first by 16 and added them to get the proper hex number.
+
+Part 2: Validating the Codes
+
+	I reuse functions from part 1 in order to decode the hexstring into the proper binary. Then I write the HOTP
+	validation, which involves constructing an HMAC using the secret key, as well as a counter. The counter is a fixed
+	value string, which contains 0x0000000000000001 in little endian order in memory. The HMAC is constructed by hashing
+	the key (extended to 64 bytes with 0), xor'd with the ipad, and concat'd with the counter. Finally the key is xor'd again
+	with the opad, then concat'd with the previous hash and then hashed for the final 20 byte string. This string is then
+	truncated by taking the last 4 bits, using it as an index, then taking the next 4 bytes and combining them into a 4 byte number.
+	Finally, the first 31 bits of this number (31 as to avoid signed vs unsigned) are modded with 10^6 as we are using 6 digit
+	numbers. The TOTP validation simply runs the HOTP validation, except it swaps out the counter with (total seconds)/30 given
+	by the unix time function. Since we get an int for seconds, what I did was I used a series of bit shifts and a for loop,
+	and I put the hex values for the number in a char string, making sure that it was in little endian order (i.e. last char
+	was byte for least sig byte). Then I compare the given HOTP and TOTP values with the generated ones.

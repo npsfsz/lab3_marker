@@ -1,0 +1,14 @@
+#Abhina Sreeskantharajan, 1001578232, abhina.sreeskantharajan@mail.utoronto.ca
+#Brameyaa Ragupathy, 1001441816, brameyaa.ragupathy@mail.utoronto.ca
+
+ECE568 
+Lab 3 Explanations
+
+generateQRcode:
+
+We encoded the given account name and issuer using the urlEncode function. We converted the secret key to a binary array using sscanf and then encoded it using the base32_encode function. We then created the otpauth URL with these values. 
+
+validateQRcode:
+
+We took in the given HOTP and TOTP value to be validated. We used a counter value of 1 and the timer value was set to the current time divided by the time period of 30 seconds. We converted the secret key into a binary array and appended null characters at the end to create a string of 64 bytes. We created the inner pad key and outer pad key by XOR'ing with the values 0x36 and 0x5c respectively (found in the RFC 2104 document for HMAC). We then input these values into the SHA1 functions to create the HMAC. We used the code in the RFC documents for HOTP which calculated the dynamic truncated value to create the 6-digit HOTP and TOTP values.
+

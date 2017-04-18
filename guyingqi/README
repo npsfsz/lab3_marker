@@ -1,0 +1,26 @@
+#Yingqian Gu, 1001116909, yingqian.gu@mail.utoronto.ca
+#Yuzhu Yao, 1001112315, cloris.yao@mail.utoronto.ca
+
+generateQRcode.c
+1, Encode account name and issure name use url encoding
+2, If secret code is not 20-byte long, pad '0' at the beginning
+3, Convert the secret string to hex value
+4, Encode secret code using base32 encoding
+5, Generate hotp and totp url and QR codes
+
+validateQRcode.c
+ValidateHOTP:
+1, Set counter to 1, and put the value into a binary array
+2, Calculate HMAC value
+3, Calculate HOTP value
+4, Compare with user provided HOTP value
+
+ValidateTOTP:
+1, Get current calendar time
+2, Calculate current sequence number of period
+3, Put the value of period into a binary array
+4, Calculate HMAC value
+5, Calculate TOTP value
+6, Compare with user provided TOTP value
+
+

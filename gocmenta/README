@@ -1,0 +1,7 @@
+Taylan Gocmen, 1000379949, taylan.gocmen@mail.utoronto.ca
+
+generateQRcode.c: generates and displays a QR code and a url link using issuer, accountName, secretHex
+usage: ./generateQRcode ECE568 gibson 12345678901234567890
+
+validateQRcode.c: validates a given QR code using secretHex, HOTP, TOTP
+usage: ./validateQRcode 12345678901234567890 803282 134318

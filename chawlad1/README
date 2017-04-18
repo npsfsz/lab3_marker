@@ -1,0 +1,18 @@
+#Dhruv Chawla, 1000394129, dhruv.chawla@mail.utoronto.ca
+#Shreyas Upadhyay, 1000443095, shreyas.upadhyay@mail.utoronto.ca
+
+This lab consists of two deliverables:
+1. generateQRcode.c
+2. validateQRcode.c 
+
+These pair of applications generate and validate respectively, one-time passwords that are compatible with Google Authenticator. They work both types of one-time passwords, Time-Based (defined in RFC 6238) and Ticket-Based (defined in RFC 4226).
+
+
+generateQRcode.c
+================
+We take in three arguments from the user, ACCOUNTNAME, ISSUER, SECRET (defined in ECE568 lab3 document). We encode ACCOUNTNAME and ISSUER into the correct format for the URIs. Then, we convert SECRET into the correct format (20 character Base-32) for the URI by padding it with 0s until it's 20 chars long, converting ASCII characters into HEX values and then using the base32_encode() function provided. The three modified arguments are then put into the URI and the resultant QR code is then displayed to the user on screen.
+
+
+validateQRcode.c
+================
+We take in three arguments from the user, SECRET_HEX, HOTP and TOTP. We calculate the HMAC using the SECRET_KEY (padded to 20 chars and converted to HEX), I_PAD (64 bits of 0x36), O_PAD (64 bits of 0x5C), 64-bit MESSAGE (a counter of 1 for HOTP and current UNIX time for TOTP). We use sha1 for calculating hash for HMAC. We then calculate the HOTP and TOTP values from the hash (by using the calculation provided in the RFCs) and compare them to the HOTP and TOTP values provided by the user to check if they are valid.

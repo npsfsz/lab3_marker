@@ -1,0 +1,35 @@
+Han Zhou, 999682614, joana.zhou@mail.utoronto.ca
+Asna Shafiq, 999677531, asna.shafiq@mail.utoronto.ca
+
+-----------------------------------------
+GenerateQRCode.c
+-----------------------------------------
+1) Convert secret hext into a byte array 
+2) Encoded the issuer and account name and byte array with base32 enoding
+3) constrct string for HOTP and TOTP using the encoded sub-components
+4) generate and display the QR code created from the HOTP and TOTP string
+
+-----------------------------------------
+ValidateQRcode.c
+-----------------------------------------
+For the HMAC Calculation, RFC2104 was used:
+  (1) To compute HMAC over the data ‘text’ we perform H(K XOR opad, H(K XOR ipad, text))
+        H in this case is the SHA-1 hash function
+        K is the key, in binary
+        text is counter for HOTP and time for TOTP
+        ipad is 0x36 repeated B times
+        opad is 0x5C repeated B times
+                where B is 64 for SHA-1
+ 
+ For both HOTP and TOTP, the following was done:
+  (1) sscanf with %02x was used to get the hex form of the secret_key
+  (2) The hex form of the key is then appened with 0x00 if it's size is less than B=64
+  (3) The key is XOR-ed (bitwise) with ipad
+  (4) They key and the counter (for HOTP) / the time (for TOTP) are hashed using SHA-1 and result is stored in ipad_sha
+  (5) The key is XOR-ed (bitwise) with opad
+  (6) The innerpad sha, ipad_sha, and key are hashed using SHA-1
+  (7) The 4 lower-order: bits of the hmac from step 6 are obtained
+  (8) The binary code is generated
+  (9) H/TOPT is then calculated using dynamic_binary_code % 100000, as there are 6 digits in the result
+  
+  To validate, the generate H/TOTP are compared with the ones provided.

@@ -1,0 +1,27 @@
+#Yizhan Jiang, 1001103593, yizhan.jiang@mail.utoronto.ca
+#Ruixin Bao, 1001294501, peter.bao@mail.utoronto.ca
+
+<generateQRCode.c>
+Encode account name and issuer in url form.
+pad zero at the end of secret_hex if its length is smaller than 20.
+Convert the secret, which was in hex form, to byte array
+Encode the the secret, in byte array form, in Base-32.
+Generate HTOP and totp url using encoded accountname, issuer, and secret. Then generate QRcode by using those url.
+
+
+<validateQRCode.c>
+
+Validate TOTP:
+First of all, we converted the secret hex into a 10-byte byte array 
+ 
+   2)Second, we divide the current time by 30 and put this into the message as a byte array
+
+   3) Afterwards, we compute the HMAC with the generated message and the key(which is xored with ipad). Here, we call this computed HMAC to be “Inner_HMAC”
+
+   4) At the end, we compute the final HMAC using sha1 algorithm and the previously used “Inner_HMAC”. We get the final HMAC by computing the HMAC between “Inner_HMAC” and the key that is XORed with opad. 
+
+   (5) Finally, we truncate the computed hashed result and convert it to char array to have a comparison with the given TOTP code.
+
+
+Validate HOTP:
+    Same as the above except this time message is a counter with value of 1

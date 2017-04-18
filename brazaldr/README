@@ -1,0 +1,12 @@
+#Aldridge Braz, 999691793, aldridge.braz@mail.utoronto.ca
+#Junwei Ma, 999584739, jeremy.ma@mail.utoronto.ca
+
+part1
+We first need to parse the secret into a byte array. Then we encode the secret byte array and other given information (issuer and account name). Using these encoded parameters, we build the HOTP and TOTP URIs used to display the respective QR codes.
+
+
+part2
+In this part we first parse the secret into byte arrays and then hash the plaintexts (secret + counter) using HMAC presented in lectures. Then we can compare the hash values to validate the password.
+The only difference between HOTP and TOTP is that TOTP uses the current time divided by 30 seconds while HOTP uses counter.
+
+

@@ -1,0 +1,9 @@
+#Yilong Pan 1000731274 yilon.pan@mail.utoronto.ca
+
+ECE568 Security System Lab3
+
+generateQRcode.c:
+This program generates both HTOP and TOTP QR codes. The secrete key is 80 bit value, and the input hex key must be less than 21 characters. The program first translate hex key into binary value, and then encoded it in Base32. The issuer and accountName are encoded using urlEncode function provided.
+
+validateQRcode.c:
+This program verifies the input HTOP and TOTP values. Again, input hex key must be less than 21 characters, HTOP & TOTP values must be 6 digits. The program first translates the hex key string into 80 bit binary value (simliar way in generateQRcode.c) and then uses different 8 byte values to calculate HMAC. For HOTP, 8 byte value is 1, and for TOTP, the values is current time divided by period of 30s. These values are then used following algorithms provided in rfc to compute HMAC. Once HAMC result is found, it is used to validate with user input. 
