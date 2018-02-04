@@ -1,8 +1,0 @@
-#Shihan Tao, 999507458, sharon.tao@mail.utoronto.ca
-#Jiashi Zhu, 999768345, jiashi.zhu@mail.utoronto.ca
-
-PART 1:
-The account name and issuer were both encoded with the provided urlEncode() function and passed along to the URI. The secret had to be first converted from base-32 value to a hexadecimal/base-16, and was then encoded with the base32_encode function. 
-
-PART 2:
-The HOTP and TOTP functions were very similar, both of them used the same function to generate an HMAC, which included using XORing the inner and outer padding with the key to generate. The HOTP used a counter for the HMAC generation, while the TOTP used a time value counter which generate the HMAC. The HMAC was then truncated following the documents and the six character output was compared to the user inputted values. 

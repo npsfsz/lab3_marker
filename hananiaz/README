@@ -1,8 +1,0 @@
-#Shu Xu, 999539600, richard.xu@mail.utoronto.ca
-#Zaid Hanania, 999480547, zaid.hanania@mail.utoronto.ca
-
-Part 1: genrateQRCode.c
-First I use urlEncode to encode all special characters in accountName and issuer. Then I write secret_hex (of length 20) into bytes (of length 10), which I can feed into base32_encode for encoding. The result, SECRET, is the encoded version of secret_hex. Then I construct two strings from ACCOUNTNAME, ISSUER and SECRET for hotpUri and totpUri. I display the QRcode by feeding these two strings to displayQRcode().
-
-Part2: validateQRCode.c
-First, I make sure the secret has a length of 20 by padding it with zeros. For validating HOTP and TOTP, the secret_hex is converted to byte array key of size 10 bytes. Then, I XOR the key with the ipad and opad, which have a size of 64. Next, I compute the inner padding hmac and outer padding hmac. Finally, I validate the extracted binary output with the HOTP/TOTP string. The only difference between validating the HOTP and the TOTP is the data used to calculate the inner HMAC: for TOTP, it’s based on a time period (30 in this case), whereas for the HOTP, it’s a counter (starts at 1 in this case).

@@ -1,8 +1,0 @@
-#Alex Cheng, 999303409, alexck.cheng@mail.utoronto.ca
-#Heindrik Bernabe, 998803843, heindrik.bernabe@mail.utoronto.ca
-
-generateQRcode.c
-- converted the input secret key to type uint8_t to be allow to be encoded via base32. converted all input to be url ready.
-
-validateQRcode.c
-- converted the input to type unit8_t, put into binary form, pass the values to SHA-1 function. Pad the result according to RFC spec. For TOTP, get the system time and put in array. 

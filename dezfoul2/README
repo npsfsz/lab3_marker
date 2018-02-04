@@ -1,6 +1,0 @@
-#Matthew Au Yeung, 999753887, matt.auyeung@mail.utoronto.ca
-#Arash Taheri-Dezfouli, 999538950, arash.taheri.dezfouli@mail.utoronto.ca
-
-For part 1, we first parse through the user input and retrieve the issuer, accountName, and the secret key. We then encode both issuer and accountName using urlEncode. Before we base32 encode the secret, we convert the hex secret to a byte array to be passed to the base32_encode function. Afterwards, we construct the otpauth url with the encoded issuer, acccount and secret.
-
-For part 2, to validate the HOTP, we first convert the secret into a byte array and then pad the rest of the size 64 array with zero's. We then XOR the every byte with the OPAD and IPAD 0x5c and 0x36 respectively. We then hash the generated inner and outter padding using sha1 to generate the hmac-sha-1 result. We use dynamic truncation to extract the 4-byte binary which we then modulo 1000000 to generate the 6 digit HOTP value. To validate TOTP, we follow the same steps as HOTP except we pass in the current time divided by the period (30 in this case).

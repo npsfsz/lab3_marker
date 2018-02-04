@@ -1,7 +1,0 @@
-Peter Tanugraha, 1001285209, p.tanugraha@mail.utoronto.ca
-
-Part 1:
-Simply append the arguments provided from the command line to feed into the function provided; displayQRcode .
-
-Part 2:
-validateQRcode need to convert into a bytestream, then based on the RFC documentation provided finish the two functions. 
